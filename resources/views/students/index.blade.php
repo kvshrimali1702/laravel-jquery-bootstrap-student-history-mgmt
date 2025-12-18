@@ -40,5 +40,5 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
     @endpush
 
-    @vite(['resources/css/pages/students/index.css', 'resources/js/pages/students/index.js'])
+    @vite(['resources/js/pages/students/index.js'])
 @endsection
