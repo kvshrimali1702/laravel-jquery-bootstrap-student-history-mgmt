@@ -10,3 +10,4 @@ alwaysApply: true
 - Always use Yajra's Laravel Datatables package installed in this project to return response for datatable endpoints when needed.
 - Always use datatables npm module from datatables.net to create a dynamic list / table of data when needed. Always create a server side datatable, never create client side datatables when needed.
 - This project has jquery, jquery.repeater, select2 and jquery-ui as dependencies so make use of them when needed.
+- We can run this project locally using command `php artisan serve` (application server) or `composer dev` (application server at `http://localhost:8000`+ vite at `http://localhost:5173`). Usually I run this myself so whenever you think of running this application first make sure that I'm not already running it on the mentioned ports.
