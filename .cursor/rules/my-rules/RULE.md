@@ -12,4 +12,7 @@ This project is a Laravel 12 application which depends on and uses laravel/ui pa
 
 ## Code
 
-- Before generating code, make sure that same functionalities, features are not available from any of the dependencies/libraries/packages installed, If already available then use the same for implementing new features/functionality/writing new code. i.e. don't re-invent the wheel, use dependencies when can use them.
+- Before generating code, make sure that same functionalities, features are not available from any of the dependencies/libraries/packages installed, If already available then use the same for implementing new features/functionality/writing new code. i.e. don't re-invent the wheel, use dependencies when can use them. See package.json and composer.json files for doing this.
+- Always use Yajra's Laravel Datatables package installed in this project to return response for datatable endpoints when needed.
+- Always use datatables npm module from datatables.net to create a dynamic list / table of data when needed. Always create a server side datatable, never create client side datatables when needed.
+- This project has jquery, jquery.repeater, select2 and jquery-ui as dependencies so make use of them when needed.
