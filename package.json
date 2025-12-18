@@ -18,6 +18,8 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
+        "datatables.net": "^1.13.7",
+        "datatables.net-bs5": "^1.13.7",
         "datatables.net-dt": "^2.3.5",
         "jquery": "^3.7.1",
         "jquery-ui": "^1.14.1",

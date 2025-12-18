@@ -16,6 +16,8 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @routes
+    @stack('styles')
 </head>
 
 <body>
@@ -34,7 +36,16 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-
+                        @auth
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}"
+                                    href="{{ route('home') }}" {{ request()->routeIs('home') ? 'aria-current="page"' : '' }}>{{ __('Home') }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('students.*') ? 'active' : '' }}"
+                                    href="{{ route('students.index') }}" {{ request()->routeIs('students.*') ? 'aria-current="page"' : '' }}>{{ __('Students') }}</a>
+                            </li>
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -62,7 +73,7 @@
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
-                                                                                 document.getElementById('logout-form').submit();">
+                                                                                         document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
 
@@ -81,6 +92,7 @@
             @yield('content')
         </main>
     </div>
+    @stack('scripts')
 </body>
 
 </html>
