@@ -69,8 +69,7 @@
                             <div class="col-md-6">
                                 <label for="birth_date" class="form-label">Birth Date <span
                                         class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="birth_date" name="birth_date"
-                                    readonly required>
+                                <input type="text" class="form-control" id="birth_date" name="birth_date" readonly required>
                             </div>
                             <div class="col-md-6">
                                 <label for="standard" class="form-label">Standard <span class="text-danger">*</span></label>
@@ -88,8 +87,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="profile_picture" class="form-label">Profile Picture</label>
-                                <input type="file" class="form-control" id="profile_picture" name="profile_picture"
-                                    accept=".jpeg,.jpg,.png,.gif,.bmp,.webp,.svg">
+                                <input type="file" class="form-control" id="profile_picture" name="profile_picture">
                                 <small class="form-text text-muted">Accepted formats: JPEG, JPG, PNG, GIF, BMP, WebP, SVG
                                     (Max: 2MB)</small>
                             </div>
@@ -166,8 +164,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Proof (Optional)</label>
-                                    <input type="file" class="form-control" name="marks[0][proof]"
-                                        accept=".pdf,.doc,.docx,.txt,.ppt,.pptx,.xls,.xlsx,.odt,.ods,.odp,.jpeg,.jpg,.png,.gif,.bmp,.webp,.svg">
+                                    <input type="file" class="form-control" name="marks[0][proof]">
                                     <small class="form-text text-muted">Accepted formats: PDF, Word, Excel, PowerPoint,
                                         Text, Images (JPEG, JPG, PNG, GIF, BMP, WebP, SVG) (Max: 10MB)</small>
                                 </div>
@@ -217,18 +214,20 @@
                             <div class="col-md-6">
                                 <label for="edit_birth_date" class="form-label">Birth Date <span
                                         class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="edit_birth_date" name="birth_date"
-                                    readonly required>
+                                <input type="text" class="form-control" id="edit_birth_date" name="birth_date" readonly
+                                    required>
                             </div>
                             <div class="col-md-6">
-                                <label for="edit_standard" class="form-label">Standard <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" id="edit_standard" name="standard" min="1" max="12"
-                                    required>
+                                <label for="edit_standard" class="form-label">Standard <span
+                                        class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="edit_standard" name="standard" min="1"
+                                    max="12" required>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="edit_status" class="form-label">Status <span class="text-danger">*</span></label>
+                                <label for="edit_status" class="form-label">Status <span
+                                        class="text-danger">*</span></label>
                                 <select class="form-select" id="edit_status" name="status" required>
                                     <option value="1">Active</option>
                                     <option value="0">Inactive</option>
@@ -239,9 +238,9 @@
                                 <div id="edit_profile_picture_preview" class="mb-2 d-none">
                                     <img src="" alt="Profile Preview" class="rounded-circle" width="60" height="60">
                                 </div>
-                                <input type="file" class="form-control" id="edit_profile_picture" name="profile_picture"
-                                    accept=".jpeg,.jpg,.png,.gif,.bmp,.webp,.svg">
-                                <small class="form-text text-muted">Leave empty to keep current picture. Accepted formats: JPEG, JPG, PNG, GIF, BMP, WebP, SVG
+                                <input type="file" class="form-control" id="edit_profile_picture" name="profile_picture">
+                                <small class="form-text text-muted">Leave empty to keep current picture. Accepted formats:
+                                    JPEG, JPG, PNG, GIF, BMP, WebP, SVG
                                     (Max: 2MB)</small>
                             </div>
                         </div>
@@ -263,7 +262,8 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="edit_street_name" class="form-label">Street Name</label>
-                                <input type="text" class="form-control" id="edit_street_name" name="street_name" maxlength="50">
+                                <input type="text" class="form-control" id="edit_street_name" name="street_name"
+                                    maxlength="50">
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -272,18 +272,21 @@
                                 <input type="text" class="form-control" id="edit_city" name="city" maxlength="50" required>
                             </div>
                             <div class="col-md-4">
-                                <label for="edit_postcode" class="form-label">Postcode <span class="text-danger">*</span></label>
+                                <label for="edit_postcode" class="form-label">Postcode <span
+                                        class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="edit_postcode" name="postcode" maxlength="30"
                                     required>
                             </div>
                             <div class="col-md-4">
                                 <label for="edit_state" class="form-label">State <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="edit_state" name="state" maxlength="50" required>
+                                <input type="text" class="form-control" id="edit_state" name="state" maxlength="50"
+                                    required>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="edit_country" class="form-label">Country <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="edit_country" name="country" maxlength="50" required>
+                            <input type="text" class="form-control" id="edit_country" name="country" maxlength="50"
+                                required>
                         </div>
 
                         <!-- Student Marks -->
@@ -345,24 +348,28 @@
                         <div class="row">
                             <div class="col-12 mb-4">
                                 <div class="d-flex align-items-start">
-                                    <div class="bg-white p-3 rounded-circle border shadow-sm me-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    <div class="bg-white p-3 rounded-circle border shadow-sm me-3 d-flex align-items-center justify-content-center"
+                                        style="width: 50px; height: 50px;">
                                         <i class="bi bi-geo-alt text-danger fs-4"></i>
                                     </div>
                                     <div class="flex-grow-1">
-                                        <label class="text-muted small text-uppercase fw-bold d-block mb-1">Full Address</label>
+                                        <label class="text-muted small text-uppercase fw-bold d-block mb-1">Full
+                                            Address</label>
                                         <p id="view_full_address" class="mb-0 fw-semibold fs-5 text-dark"></p>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="d-flex align-items-center p-2 bg-white rounded border shadow-sm h-100">
-                                    <div class="bg-primary-subtle text-primary p-2 rounded-3 me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                    <div class="bg-primary-subtle text-primary p-2 rounded-3 me-3 d-flex align-items-center justify-content-center"
+                                        style="width: 40px; height: 40px;">
                                         <i class="bi bi-house-door fs-5"></i>
                                     </div>
                                     <div>
-                                        <label class="text-muted small d-block lh-1 mb-1 text-uppercase fw-bold" style="font-size: 0.65rem;">Street Info</label>
+                                        <label class="text-muted small d-block lh-1 mb-1 text-uppercase fw-bold"
+                                            style="font-size: 0.65rem;">Street Info</label>
                                         <div class="text-dark">
-                                            <span id="view_street_number" class="fw-medium"></span> 
+                                            <span id="view_street_number" class="fw-medium"></span>
                                             <span id="view_street_name"></span>
                                         </div>
                                     </div>
@@ -370,44 +377,52 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="d-flex align-items-center p-2 bg-white rounded border shadow-sm h-100">
-                                    <div class="bg-info-subtle text-info p-2 rounded-3 me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                    <div class="bg-info-subtle text-info p-2 rounded-3 me-3 d-flex align-items-center justify-content-center"
+                                        style="width: 40px; height: 40px;">
                                         <i class="bi bi-mailbox fs-5"></i>
                                     </div>
                                     <div>
-                                        <label class="text-muted small d-block lh-1 mb-1 text-uppercase fw-bold" style="font-size: 0.65rem;">Postcode</label>
+                                        <label class="text-muted small d-block lh-1 mb-1 text-uppercase fw-bold"
+                                            style="font-size: 0.65rem;">Postcode</label>
                                         <span id="view_postcode" class="fw-medium text-dark"></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3 mb-md-0">
                                 <div class="d-flex align-items-center p-2 bg-white rounded border shadow-sm h-100">
-                                    <div class="bg-success-subtle text-success p-2 rounded-3 me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                    <div class="bg-success-subtle text-success p-2 rounded-3 me-3 d-flex align-items-center justify-content-center"
+                                        style="width: 40px; height: 40px;">
                                         <i class="bi bi-building fs-5"></i>
                                     </div>
                                     <div>
-                                        <label class="text-muted small d-block lh-1 mb-1 text-uppercase fw-bold" style="font-size: 0.65rem;">City</label>
+                                        <label class="text-muted small d-block lh-1 mb-1 text-uppercase fw-bold"
+                                            style="font-size: 0.65rem;">City</label>
                                         <span id="view_city" class="fw-medium text-dark"></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3 mb-md-0">
                                 <div class="d-flex align-items-center p-2 bg-white rounded border shadow-sm h-100">
-                                    <div class="bg-warning-subtle text-warning p-2 rounded-3 me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                    <div class="bg-warning-subtle text-warning p-2 rounded-3 me-3 d-flex align-items-center justify-content-center"
+                                        style="width: 40px; height: 40px;">
                                         <i class="bi bi-map fs-5"></i>
                                     </div>
                                     <div>
-                                        <label class="text-muted small d-block lh-1 mb-1 text-uppercase fw-bold" style="font-size: 0.65rem;">State</label>
+                                        <label class="text-muted small d-block lh-1 mb-1 text-uppercase fw-bold"
+                                            style="font-size: 0.65rem;">State</label>
                                         <span id="view_state" class="fw-medium text-dark"></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="d-flex align-items-center p-2 bg-white rounded border shadow-sm h-100">
-                                    <div class="bg-secondary-subtle text-secondary p-2 rounded-3 me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                    <div class="bg-secondary-subtle text-secondary p-2 rounded-3 me-3 d-flex align-items-center justify-content-center"
+                                        style="width: 40px; height: 40px;">
                                         <i class="bi bi-globe fs-5"></i>
                                     </div>
                                     <div>
-                                        <label class="text-muted small d-block lh-1 mb-1 text-uppercase fw-bold" style="font-size: 0.65rem;">Country</label>
+                                        <label class="text-muted small d-block lh-1 mb-1 text-uppercase fw-bold"
+                                            style="font-size: 0.65rem;">Country</label>
                                         <span id="view_country" class="fw-medium text-dark"></span>
                                     </div>
                                 </div>
@@ -469,13 +484,13 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Total Marks <span class="text-danger">*</span></label>
-                    <input type="number" class="form-control edit-total-marks" name="marks[TEMP_IDX][total_marks]"
-                        min="1" required>
+                    <input type="number" class="form-control edit-total-marks" name="marks[TEMP_IDX][total_marks]" min="1"
+                        required>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Obtained Marks <span class="text-danger">*</span></label>
-                    <input type="number" class="form-control edit-obtained-marks"
-                        name="marks[TEMP_IDX][obtained_marks]" min="0" required>
+                    <input type="number" class="form-control edit-obtained-marks" name="marks[TEMP_IDX][obtained_marks]"
+                        min="0" required>
                 </div>
             </div>
             <div class="mb-3">
@@ -483,8 +498,7 @@
                 <div class="edit-proof-preview mb-2 d-none">
                     <a href="" target="_blank" class="btn btn-sm btn-outline-secondary">View Current Proof</a>
                 </div>
-                <input type="file" class="form-control" name="marks[TEMP_IDX][proof]"
-                    accept=".pdf,.doc,.docx,.txt,.ppt,.pptx,.xls,.xlsx,.odt,.ods,.odp,.jpeg,.jpg,.png,.gif,.bmp,.webp,.svg">
+                <input type="file" class="form-control" name="marks[TEMP_IDX][proof]">
                 <small class="form-text text-muted">Accepted formats: PDF, Word, Excel, PowerPoint,
                     Text, Images (JPEG, JPG, PNG, GIF, BMP, WebP, SVG) (Max: 10MB)</small>
             </div>

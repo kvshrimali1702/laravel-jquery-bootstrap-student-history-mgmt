@@ -579,8 +579,53 @@ $(document).ready(async function () {
     // Initialize jQuery Validation (Bootstrap-friendly)
     const validator = $form.validate({
         ...getCommonConfig($form),
-        rules: getCommonRules('create'),
-        messages: getCommonMessages()
+        rules: {
+            ...getCommonRules('create'),
+            'marks[0][subject_id]': {
+                required: true,
+                uniqueSubject: true,
+            },
+            'marks[0][total_marks]': {
+                required: true,
+                digits: true,
+                min: 1,
+                max: 1000,
+            },
+            'marks[0][obtained_marks]': {
+                required: true,
+                digits: true,
+                min: 0,
+                maxObtainedMarks: true,
+            },
+            'marks[0][proof]': {
+                extension: "pdf|doc|docx|txt|ppt|pptx|xls|xlsx|odt|ods|odp|jpg|jpeg|png|gif|bmp|webp|svg",
+                filesize: 10485760, // 10MB in bytes
+                accept: false,
+            },
+        },
+        messages: {
+            ...getCommonMessages(),
+            'marks[0][subject_id]': {
+                required: 'Subject is required.',
+                uniqueSubject: 'Each subject can only be selected once.',
+            },
+            'marks[0][total_marks]': {
+                required: 'Total marks is required.',
+                digits: 'Total marks must be a number.',
+                min: 'Total marks must be at least 1.',
+                max: 'Total marks must not exceed 1000.',
+            },
+            'marks[0][obtained_marks]': {
+                required: 'Obtained marks is required.',
+                digits: 'Obtained marks must be a number.',
+                min: 'Obtained marks cannot be negative.',
+                maxObtainedMarks: 'Obtained marks cannot be greater than total marks.',
+            },
+            'marks[0][proof]': {
+                extension: 'Proof must be a valid file type (PDF, Word, Excel, PowerPoint, Text, Images).',
+                filesize: 'Proof file must not exceed 10MB.',
+            },
+        },
     });
 
     // Single submit handler: validate (jQuery Validate) then AJAX submit; never refresh.
