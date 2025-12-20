@@ -1,0 +1,7 @@
+---
+alwaysApply: true
+---
+
+# JavaScript rules
+
+- Never write html or templates in js files, always create template elements in actual templates (html files, blade.php files, react files (js, jsx), vue (vue files), or other frontend files)

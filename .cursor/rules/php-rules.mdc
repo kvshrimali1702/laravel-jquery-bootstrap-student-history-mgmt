@@ -1,0 +1,8 @@
+---
+alwaysApply: true
+---
+
+# PHP Rules
+
+- Always follow the accepted PHP Standards Recommendations (PSRs).
+- Never write HTML or CSS code in Normal PHP files (not blade files), always use proper files and imports when necessary.

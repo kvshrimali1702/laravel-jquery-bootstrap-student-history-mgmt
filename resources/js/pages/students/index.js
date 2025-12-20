@@ -48,5 +48,23 @@ $(document).ready(function () {
             infoFiltered: '(filtered from _MAX_ total entries)'
         }
     });
+
+    // View Student
+    $(document).on('click', '.view-student', function () {
+        const id = $(this).data('id');
+        $(document).trigger('student:view', [id]);
+    });
+
+    // Edit Student
+    $(document).on('click', '.edit-student', function () {
+        const id = $(this).data('id');
+        $(document).trigger('student:edit', [id]);
+    });
+
+    // Delete Student
+    $(document).on('click', '.delete-student', function () {
+        const id = $(this).data('id');
+        $(document).trigger('student:delete', [id]);
+    });
 });
 

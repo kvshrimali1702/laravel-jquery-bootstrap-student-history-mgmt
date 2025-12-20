@@ -46,7 +46,7 @@ class StudentService
                 return $this->formatAddress($student);
             })
             ->addColumn('actions', function ($student) {
-                return '';
+                return view('students.partials.actions', compact('student'))->render();
             })
             ->rawColumns(['profile_picture', 'status', 'address', 'actions'])
             ->make(true);
@@ -105,13 +105,16 @@ class StudentService
     public function createStudent(array $data): Student
     {
         return DB::transaction(function () use ($data) {
+            $disk = $this->fileUploadService->getTargetDisk();
+
             // Handle profile picture upload
             if (isset($data['profile_picture']) && $data['profile_picture']) {
                 $data['profile_picture'] = $this->fileUploadService->upload(
                     $data['profile_picture'],
                     'students/profile-pictures',
-                    'public'
+                    $disk
                 );
+                $data['profile_picture_disk'] = $disk;
             }
 
             // Extract address data
@@ -130,7 +133,7 @@ class StudentService
             $student->address()->create($addressData);
 
             // Prepare marks for bulk insert
-            $marksToInsert = $this->prepareMarksForInsert($marksData, $student->id);
+            $marksToInsert = $this->prepareMarksForInsert($marksData, $student->id, $disk);
 
             // Bulk insert marks for better performance
             if (! empty($marksToInsert)) {
@@ -139,6 +142,158 @@ class StudentService
 
             return $student->load('address', 'studentSubjectMarks.subject');
         });
+    }
+
+    /**
+     * Get student by ID with relations.
+     */
+    public function getStudentById(int $id): ?Student
+    {
+        return $this->studentRepository->find($id, ['address', 'studentSubjectMarks.subject']);
+    }
+
+    /**
+     * Update an existing student.
+     */
+    public function updateStudent(int $id, array $data): Student
+    {
+        $student = $this->studentRepository->find($id);
+
+        if (! $student) {
+            throw new \Exception('Student not found.');
+        }
+
+        return DB::transaction(function () use ($student, $data) {
+            $disk = $this->fileUploadService->getTargetDisk();
+
+            // Handle profile picture update
+            if (isset($data['profile_picture']) && $data['profile_picture']) {
+                // Delete old profile picture if exists
+                if ($student->profile_picture) {
+                    $this->fileUploadService->delete($student->profile_picture, $student->profile_picture_disk);
+                }
+
+                $data['profile_picture'] = $this->fileUploadService->upload(
+                    $data['profile_picture'],
+                    'students/profile-pictures',
+                    $disk
+                );
+                $data['profile_picture_disk'] = $disk;
+            }
+
+            // Extract nested data
+            $addressData = $this->extractAddressData($data);
+            $marksData = $data['marks'] ?? [];
+            $studentData = $this->extractStudentData($data);
+
+            // Update student
+            $this->studentRepository->update($student, $studentData);
+
+            // Update address
+            $student->address()->update($addressData);
+
+            // Update marks
+            $this->updateStudentMarks($student, $marksData);
+
+            return $student->load('address', 'studentSubjectMarks.subject');
+        });
+    }
+
+    /**
+     * Delete a student and associated data.
+     */
+    public function deleteStudent(int $id): bool
+    {
+        $student = $this->studentRepository->find($id, ['address', 'studentSubjectMarks']);
+
+        if (! $student) {
+            throw new \Exception('Student not found.');
+        }
+
+        return DB::transaction(function () use ($student) {
+            // Delete profile picture
+            if ($student->profile_picture) {
+                $this->fileUploadService->delete($student->profile_picture, $student->profile_picture_disk);
+            }
+
+            // Delete proof files for marks
+            foreach ($student->studentSubjectMarks as $mark) {
+                if ($mark->proof) {
+                    $this->fileUploadService->delete($mark->proof, $mark->proof_disk);
+                }
+            }
+
+            // Delete marks (cascade should handle this if defined in migration, but we'll be explicit if needed)
+            $student->studentSubjectMarks()->delete();
+
+            // Delete address
+            $student->address()->delete();
+
+            // Delete student
+            return $this->studentRepository->delete($student);
+        });
+    }
+
+    /**
+     * Update student marks.
+     */
+    private function updateStudentMarks(Student $student, array $marksData): void
+    {
+        $existingMarkIds = $student->studentSubjectMarks->pluck('id')->toArray();
+        $newMarkIds = [];
+        $disk = $this->fileUploadService->getTargetDisk();
+
+        foreach ($marksData as $markData) {
+            $markId = $markData['id'] ?? null;
+
+            // Handle proof file upload
+            if (isset($markData['proof']) && $markData['proof']) {
+                // If updating existing mark, delete old proof
+                if ($markId) {
+                    $existingMark = StudentSubjectMark::find($markId);
+                    if ($existingMark && $existingMark->proof) {
+                        $this->fileUploadService->delete($existingMark->proof, $existingMark->proof_disk);
+                    }
+                }
+
+                $markData['proof'] = $this->fileUploadService->upload(
+                    $markData['proof'],
+                    'students/marks-proofs',
+                    $disk
+                );
+                $markData['proof_disk'] = $disk;
+            } else {
+                // Keep existing proof if no new file uploaded and it's an update
+                if ($markId) {
+                    unset($markData['proof']);
+                    unset($markData['proof_disk']);
+                } else {
+                    $markData['proof'] = null;
+                    $markData['proof_disk'] = null;
+                }
+            }
+
+            if ($markId) {
+                $newMarkIds[] = $markId;
+                StudentSubjectMark::where('id', $markId)->update($markData);
+            } else {
+                $markData['student_id'] = $student->id;
+                $newMark = StudentSubjectMark::create($markData);
+                $newMarkIds[] = $newMark->id;
+            }
+        }
+
+        // Delete marks that were removed
+        $marksToDelete = array_diff($existingMarkIds, $newMarkIds);
+        if (! empty($marksToDelete)) {
+            $marksToCleanup = StudentSubjectMark::whereIn('id', $marksToDelete)->get();
+            foreach ($marksToCleanup as $mark) {
+                if ($mark->proof) {
+                    $this->fileUploadService->delete($mark->proof, $mark->proof_disk);
+                }
+                $mark->delete();
+            }
+        }
     }
 
     /**
@@ -185,12 +340,12 @@ class StudentService
     /**
      * Prepare marks data for bulk insert with file uploads.
      */
-    private function prepareMarksForInsert(array $marksData, int $studentId): array
+    private function prepareMarksForInsert(array $marksData, int $studentId, string $disk): array
     {
         // Get timestamp once for all records
         $now = now();
 
-        return array_map(function ($markData) use ($studentId, $now) {
+        return array_map(function ($markData) use ($studentId, $now, $disk) {
             $markData['student_id'] = $studentId;
 
             // Handle proof file upload
@@ -198,10 +353,12 @@ class StudentService
                 $markData['proof'] = $this->fileUploadService->upload(
                     $markData['proof'],
                     'students/marks-proofs',
-                    'public'
+                    $disk
                 );
+                $markData['proof_disk'] = $disk;
             } else {
                 $markData['proof'] = null;
+                $markData['proof_disk'] = null;
             }
 
             // Add timestamps for bulk insert

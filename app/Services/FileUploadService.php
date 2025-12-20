@@ -58,15 +58,23 @@ class FileUploadService
     }
 
     /**
-     * Get default disk based on environment.
+     * Get target disk for uploads.
      */
-    private function getDefaultDisk(): string
+    public function getTargetDisk(): string
     {
         if (config('app.env') === 'production') {
             return config('filesystems.default_oracle', 'oracle');
         }
 
-        return config('filesystems.default', 'local');
+        return config('filesystems.default_upload', 'public');
+    }
+
+    /**
+     * Get default disk based on environment.
+     */
+    private function getDefaultDisk(): string
+    {
+        return $this->getTargetDisk();
     }
 
     /**
@@ -75,5 +83,35 @@ class FileUploadService
     private function isOracleBucketDisk(string $disk): bool
     {
         return $disk === 'oracle' || str_starts_with($disk, 'oracle');
+    }
+
+    /**
+     * Delete file from storage.
+     */
+    public function delete(?string $url, ?string $disk = null): bool
+    {
+        if (! $url) {
+            return false;
+        }
+
+        $disk = $disk ?? $this->getDefaultDisk();
+        $path = $this->extractPathFromUrl($url, $disk);
+
+        if ($path && Storage::disk($disk)->exists($path)) {
+            return Storage::disk($disk)->delete($path);
+        }
+
+        return false;
+    }
+
+    /**
+     * Extract path from URL.
+     */
+    private function extractPathFromUrl(string $url, string $disk): ?string
+    {
+        $baseUrl = Storage::disk($disk)->url('');
+        $path = str_replace($baseUrl, '', $url);
+
+        return ltrim($path, '/');
     }
 }

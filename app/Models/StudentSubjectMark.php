@@ -16,6 +16,7 @@ class StudentSubjectMark extends Model
         'total_marks',
         'obtained_marks',
         'proof',
+        'proof_disk',
     ];
 
     protected function casts(): array

@@ -2,24 +2,76 @@
 @import "select2/dist/css/select2.min.css";
 @import "select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css";
 
-/* General Scrollable Modal Fixes */
-.modal-dialog-scrollable {
-    max-height: calc(100vh - 1rem);
+/* 
+ * Custom styles for Students Management
+ */
+
+/* Fix for Select2 inside Bootstrap Modals */
+.select2-container--bootstrap-5 {
+    z-index: 1061 !important;
 }
 
+.select2-container--bootstrap-5 .select2-selection {
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+}
+
+/* 
+ * MODAL SCROLLING FIX:
+ * Bootstrap 5's .modal-dialog-scrollable requires a specific flex context.
+ * When a <form> tag is placed inside .modal-content, it breaks the default flex 
+ * inheritance. We restore it here.
+ */
 .modal-dialog-scrollable .modal-content {
-    max-height: 100%;
-    overflow: hidden;
+    max-height: 90vh; /* Ensure it fits in viewport */
+    display: flex !important;
+    flex-direction: column !important;
 }
 
-/* Specific body height for students modal to handle the repeater area */
-#addStudentModal .modal-dialog-scrollable .modal-body {
-    overflow-y: auto;
-    max-height: calc(100vh - 250px);
+/* If form is a direct child of modal-content, it must be a flex container */
+.modal-dialog-scrollable .modal-content > form {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    overflow: hidden !important;
+    min-height: 0;
 }
 
-@media (max-width: 768px) {
-    #addStudentModal .modal-dialog-scrollable .modal-body {
-        max-height: calc(100vh - 200px);
-    }
+.modal-dialog-scrollable .modal-body {
+    flex: 1 1 auto !important;
+    overflow-y: auto !important;
+    min-height: 0;
+}
+
+/* Fix for view details modal specifically if needed */
+#viewStudentModal .modal-body {
+    padding: 1.5rem;
+}
+
+/* Address details styling in View Modal */
+.address-details label {
+    color: #6c757d;
+    letter-spacing: 0.5px;
+}
+
+.address-details .bg-light {
+    border-color: #dee2e6 !important;
+}
+
+/* Table fixes */
+#students-table td {
+    vertical-align: middle;
+}
+
+/* Marks entry styling */
+.marks-entry {
+    background-color: #f8f9fa;
+    transition: all 0.2s ease;
+    margin-bottom: 1rem;
+}
+
+.marks-entry:hover {
+    background-color: #f1f3f5;
+    border-color: #ced4da !important;
 }

@@ -14,6 +14,7 @@ class Student extends Model
 
     protected $fillable = [
         'profile_picture',
+        'profile_picture_disk',
         'first_name',
         'last_name',
         'birth_date',
@@ -28,6 +29,14 @@ class Student extends Model
             'status' => StudentStatus::class,
             'standard' => 'integer',
         ];
+    }
+
+    /**
+     * Prepare a date for array / JSON serialization.
+     */
+    protected function serializeDate(\DateTimeInterface $date): string
+    {
+        return $date->format('Y-m-d');
     }
 
     public function address(): HasOne
