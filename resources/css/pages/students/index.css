@@ -1,0 +1,25 @@
+@import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
+@import "select2/dist/css/select2.min.css";
+@import "select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css";
+
+/* General Scrollable Modal Fixes */
+.modal-dialog-scrollable {
+    max-height: calc(100vh - 1rem);
+}
+
+.modal-dialog-scrollable .modal-content {
+    max-height: 100%;
+    overflow: hidden;
+}
+
+/* Specific body height for students modal to handle the repeater area */
+#addStudentModal .modal-dialog-scrollable .modal-body {
+    overflow-y: auto;
+    max-height: calc(100vh - 250px);
+}
+
+@media (max-width: 768px) {
+    #addStudentModal .modal-dialog-scrollable .modal-body {
+        max-height: calc(100vh - 200px);
+    }
+}

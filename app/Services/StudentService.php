@@ -3,14 +3,18 @@
 namespace App\Services;
 
 use App\Enums\StudentStatus;
+use App\Models\Student;
+use App\Models\StudentSubjectMark;
 use App\Repositories\Contracts\StudentRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class StudentService
 {
     public function __construct(
-        private readonly StudentRepositoryInterface $studentRepository
+        private readonly StudentRepositoryInterface $studentRepository,
+        private readonly FileUploadService $fileUploadService
     ) {}
 
     /**
@@ -94,5 +98,117 @@ class StudentService
 
         return '<span class="text-muted">No address</span>';
     }
-}
 
+    /**
+     * Create a new student with address and marks.
+     */
+    public function createStudent(array $data): Student
+    {
+        return DB::transaction(function () use ($data) {
+            // Handle profile picture upload
+            if (isset($data['profile_picture']) && $data['profile_picture']) {
+                $data['profile_picture'] = $this->fileUploadService->upload(
+                    $data['profile_picture'],
+                    'students/profile-pictures',
+                    'public'
+                );
+            }
+
+            // Extract address data
+            $addressData = $this->extractAddressData($data);
+
+            // Extract marks data
+            $marksData = $data['marks'] ?? [];
+
+            // Clean student data - remove nested data that will be created separately
+            $studentData = $this->extractStudentData($data);
+
+            // Create student
+            $student = $this->studentRepository->create($studentData);
+
+            // Create address
+            $student->address()->create($addressData);
+
+            // Prepare marks for bulk insert
+            $marksToInsert = $this->prepareMarksForInsert($marksData, $student->id);
+
+            // Bulk insert marks for better performance
+            if (! empty($marksToInsert)) {
+                StudentSubjectMark::insert($marksToInsert);
+            }
+
+            return $student->load('address', 'studentSubjectMarks.subject');
+        });
+    }
+
+    /**
+     * Extract address data from student data array.
+     */
+    private function extractAddressData(array $data): array
+    {
+        return [
+            'full_address' => $data['full_address'],
+            'street_number' => $data['street_number'] ?? null,
+            'street_name' => $data['street_name'] ?? null,
+            'city' => $data['city'],
+            'postcode' => $data['postcode'],
+            'state' => $data['state'],
+            'country' => $data['country'],
+        ];
+    }
+
+    /**
+     * Extract student data, removing nested structures.
+     */
+    private function extractStudentData(array $data): array
+    {
+        $studentData = $data;
+        unset(
+            $studentData['full_address'],
+            $studentData['street_number'],
+            $studentData['street_name'],
+            $studentData['city'],
+            $studentData['postcode'],
+            $studentData['state'],
+            $studentData['country'],
+            $studentData['marks']
+        );
+
+        // Remove profile_picture if it's null or empty
+        if (empty($studentData['profile_picture'])) {
+            unset($studentData['profile_picture']);
+        }
+
+        return $studentData;
+    }
+
+    /**
+     * Prepare marks data for bulk insert with file uploads.
+     */
+    private function prepareMarksForInsert(array $marksData, int $studentId): array
+    {
+        // Get timestamp once for all records
+        $now = now();
+
+        return array_map(function ($markData) use ($studentId, $now) {
+            $markData['student_id'] = $studentId;
+
+            // Handle proof file upload
+            if (isset($markData['proof']) && $markData['proof']) {
+                $markData['proof'] = $this->fileUploadService->upload(
+                    $markData['proof'],
+                    'students/marks-proofs',
+                    'public'
+                );
+            } else {
+                $markData['proof'] = null;
+            }
+
+            // Add timestamps for bulk insert
+            $markData['created_at'] = $now;
+            $markData['updated_at'] = $now;
+
+            return $markData;
+        }, $marksData);
+    }
+}

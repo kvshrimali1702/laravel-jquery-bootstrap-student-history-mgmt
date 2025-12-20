@@ -18,7 +18,7 @@ class StudentFactory extends Factory
     public function definition(): array
     {
         return [
-            'profile_picture' => fake()->optional()->imageUrl(200, 200, 'people'),
+            'profile_picture' => null, // Use null instead of external placeholder to avoid DNS lookups
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
             'birth_date' => fake()->dateTimeBetween('-18 years', '-10 years'),

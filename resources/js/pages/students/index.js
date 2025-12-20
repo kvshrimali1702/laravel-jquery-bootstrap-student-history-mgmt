@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from '../../utils/jquery-select2.js';
 import 'datatables.net';
 import 'datatables.net-bs5';
 

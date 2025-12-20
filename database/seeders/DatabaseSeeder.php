@@ -22,8 +22,14 @@ class DatabaseSeeder extends Seeder
             'email' => 'krunal.shrimali@yopmail.com',
         ]);
 
+        // Required data for the application to work
         $this->call([
-            StudentSeeder::class,
+            SubjectSeeder::class,
         ]);
+
+        // Optional data for the application to work
+        // $this->call([
+        //     StudentSeeder::class,
+        // ]);
     }
 }
